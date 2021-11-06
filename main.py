@@ -6,11 +6,12 @@ import platform
 
 
 FONT = 'Futura'
-WINDOW_DIM = "580x525"
+WINDOW_DIM = "580x535"
 BUTTON_FONT_SIZE = 32
 BUTTON_IPADX = 0
 
-if (platform.system() == "Windows"):
+
+if platform.system() == "Windows":
     FONT = 'Bahnschrift SemiBold SemiConden'
     WINDOW_DIM = "640x600"
     BUTTON_FONT_SIZE = 19
