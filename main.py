@@ -2,9 +2,19 @@ import requests
 import tkinter
 from PIL import ImageTk, Image
 from datetime import datetime
+import platform
 
 
 FONT = 'Futura'
+WINDOW_DIM = "580x525"
+BUTTON_FONT_SIZE = 32
+BUTTON_IPADX = 0
+
+if (platform.system() == "Windows"):
+    FONT = 'Bahnschrift SemiBold SemiConden'
+    WINDOW_DIM = "640x600"
+    BUTTON_FONT_SIZE = 19
+    BUTTON_IPADX = 10
 
 
 def weather_api_connection(city):
@@ -42,7 +52,7 @@ def sunset(city):
 
 window = tkinter.Tk()
 window.title("WeatherCool")
-window.geometry("580x525")
+window.geometry(WINDOW_DIM)
 
 tkinter.Label(window, text="What's the weather in:", font=(FONT, 52)).pack(pady=10)
 
@@ -80,8 +90,8 @@ def enter_click_action(event):
 
 window.bind('<Return>', enter_click_action)
 
-button = tkinter.Button(entry_frame, text="🔍", font=(FONT, 30), command=click_action)
-button.pack(pady=10, side='left')
+button = tkinter.Button(entry_frame, text="🔍", font=(FONT, BUTTON_FONT_SIZE), command=click_action)
+button.pack(pady=10, ipadx=BUTTON_IPADX, side='left')
 
 entry_frame.pack()
 
