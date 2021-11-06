@@ -1,7 +1,7 @@
 import requests
 import tkinter
 from PIL import ImageTk, Image
-
+from datetime import datetime
 
 FONT = 'Times New Roman'
 
@@ -30,12 +30,12 @@ def humidity(city):
 
 def sunrise(city):
     response = weather_api_connection(city)
-    return response.json()['sys']['sunrise']
+    return datetime.fromtimestamp(response.json()['sys']['sunrise']).strftime('%X')
 
 
 def sunset(city):
     response = weather_api_connection(city)
-    return response.json()['sys']['sunset']
+    return datetime.fromtimestamp(response.json()['sys']['sunset']).strftime('%X')
 
 
 window = tkinter.Tk()
@@ -65,15 +65,16 @@ def click_action():
     humidity_label.config(text=humidity(entry.get()))
     sunrise_label.config(text=sunrise(entry.get()))
     sunset_label.config(text=sunset(entry.get()))
-    canvas.create_image(0, 3, anchor=tkinter.NW, image=img_temp)
+    canvas_temp.create_image(0, 3, anchor=tkinter.NW, image=img_temp)
+    canvas_clouds.create_image(0, 3, anchor=tkinter.NW, image=img_clouds)
+    canvas_humidity.create_image(0, 3, anchor=tkinter.NW, image=img_humidity)
+    canvas_sunrise.create_image(0, 3, anchor=tkinter.NW, image=img_sunrise)
+    canvas_sunset.create_image(0, 3, anchor=tkinter.NW, image=img_sunset)
+
 
 def enter_click_action(event):
-    temp_label.config(text=temp(entry.get()))
-    clouds_label.config(text=clouds(entry.get()))
-    humidity_label.config(text=humidity(entry.get()))
-    sunrise_label.config(text=sunrise(entry.get()))
-    sunset_label.config(text=sunset(entry.get()))
-    canvas.create_image(0, 3, anchor=tkinter.NW, image=img_temp)
+    click_action()
+
 
 window.bind('<Return>', enter_click_action)
 
@@ -84,22 +85,52 @@ entry_frame.pack()
 
 temp_frame = tkinter.Frame(window)
 temp_frame.pack(pady=5)
-canvas = tkinter.Canvas(temp_frame, width=68, height=68)
-canvas.pack(side='left')
+canvas_temp = tkinter.Canvas(temp_frame, width=68, height=68)
+canvas_temp.pack(side='left')
 img = Image.open("resources/temp.png")
-# img = img.resize((27, 27), Image.)
 img_temp = ImageTk.PhotoImage(img)
+
+
+clouds_frame = tkinter.Frame(window)
+clouds_frame.pack(pady=5)
+canvas_clouds = tkinter.Canvas(clouds_frame, width=68, height=68)
+canvas_clouds.pack(side='left')
+img = Image.open("resources/cloudy.png")
+img_clouds = ImageTk.PhotoImage(img)
+
+
+humidity_frame = tkinter.Frame(window)
+humidity_frame.pack(pady=5)
+canvas_humidity = tkinter.Canvas(humidity_frame, width=68, height=68)
+canvas_humidity.pack(side='left')
+img = Image.open("resources/drops.png")
+img_humidity = ImageTk.PhotoImage(img)
 
 
 temp_label = tkinter.Label(temp_frame, font=(FONT, 42))
 temp_label.pack(pady=5, side='left')
-clouds_label = tkinter.Label(window, font=(FONT, 42))
-clouds_label.pack(pady=5)
-humidity_label = tkinter.Label(window, font=(FONT, 42))
-humidity_label.pack(pady=5)
-sunrise_label = tkinter.Label(window, font=(FONT, 26))
+clouds_label = tkinter.Label(clouds_frame, font=(FONT, 42))
+clouds_label.pack(pady=5, side='left')
+humidity_label = tkinter.Label(humidity_frame, font=(FONT, 42))
+humidity_label.pack(pady=5, side='left')
+
+
+sun_frame = tkinter.Frame(window)
+sun_frame.pack(pady=5)
+canvas_sunrise = tkinter.Canvas(sun_frame, width=68, height=68)
+canvas_sunset = tkinter.Canvas(sun_frame, width=68, height=68)
+img = Image.open("resources/sunrise.png")
+img_sunrise = ImageTk.PhotoImage(img)
+img = Image.open("resources/sunset.png")
+img_sunset = ImageTk.PhotoImage(img)
+
+sunrise_label = tkinter.Label(sun_frame, font=(FONT, 42))
+sunset_label = tkinter.Label(sun_frame, font=(FONT, 42))
+
+
+canvas_sunrise.pack(side='left')
 sunrise_label.pack(pady=5, side='left')
-sunset_label = tkinter.Label(window, font=(FONT, 26))
+canvas_sunset.pack(side='left')
 sunset_label.pack(pady=5, side='left')
 
 window.mainloop()
