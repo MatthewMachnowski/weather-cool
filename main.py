@@ -1,5 +1,7 @@
 import requests
 import tkinter
+from PIL import ImageTk, Image
+
 
 FONT = 'Times New Roman'
 
@@ -23,7 +25,7 @@ def clouds(city):
 
 def humidity(city):
     response = weather_api_connection(city)
-    return response.json()['main']['humidity']
+    return f"{response.json()['main']['humidity']}%"
 
 
 def sunrise(city):
@@ -38,13 +40,13 @@ def sunset(city):
 
 window = tkinter.Tk()
 window.title("WeatherCool")
-window.geometry("400x400")
+window.geometry("550x550")
 
-tkinter.Label(window, text="What's the weather in:", font=(FONT, 36)).pack(pady=10)
+tkinter.Label(window, text="What's the weather in:", font=(FONT, 52)).pack(pady=10)
 
 entry_frame = tkinter.Frame(window)
 
-entry = tkinter.Entry(entry_frame, font=(FONT, 22))
+entry = tkinter.Entry(entry_frame, font=(FONT, 30))
 entry.insert(0, 'Enter city')
 entry.pack(side='left')
 
@@ -63,7 +65,7 @@ def click_action():
     humidity_label.config(text=humidity(entry.get()))
     sunrise_label.config(text=sunrise(entry.get()))
     sunset_label.config(text=sunset(entry.get()))
-
+    canvas.create_image(0, 3, anchor=tkinter.NW, image=img_temp)
 
 def enter_click_action(event):
     temp_label.config(text=temp(entry.get()))
@@ -71,20 +73,29 @@ def enter_click_action(event):
     humidity_label.config(text=humidity(entry.get()))
     sunrise_label.config(text=sunrise(entry.get()))
     sunset_label.config(text=sunset(entry.get()))
-
+    canvas.create_image(0, 3, anchor=tkinter.NW, image=img_temp)
 
 window.bind('<Return>', enter_click_action)
 
-button = tkinter.Button(entry_frame, text="Check", font=(FONT, 21), command=click_action)
+button = tkinter.Button(entry_frame, text="Check", font=(FONT, 30), command=click_action)
 button.pack(pady=10, side='left')
 
 entry_frame.pack()
 
-temp_label = tkinter.Label(window, font=(FONT, 26))
-temp_label.pack(pady=5)
-clouds_label = tkinter.Label(window, font=(FONT, 26))
+temp_frame = tkinter.Frame(window)
+temp_frame.pack(pady=5)
+canvas = tkinter.Canvas(temp_frame, width=68, height=68)
+canvas.pack(side='left')
+img = Image.open("resources/temp.png")
+# img = img.resize((27, 27), Image.)
+img_temp = ImageTk.PhotoImage(img)
+
+
+temp_label = tkinter.Label(temp_frame, font=(FONT, 42))
+temp_label.pack(pady=5, side='left')
+clouds_label = tkinter.Label(window, font=(FONT, 42))
 clouds_label.pack(pady=5)
-humidity_label = tkinter.Label(window, font=(FONT, 26))
+humidity_label = tkinter.Label(window, font=(FONT, 42))
 humidity_label.pack(pady=5)
 sunrise_label = tkinter.Label(window, font=(FONT, 26))
 sunrise_label.pack(pady=5, side='left')
