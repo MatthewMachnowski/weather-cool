@@ -1,8 +1,13 @@
-import requests
-import tkinter
-from PIL import ImageTk, Image
-from datetime import datetime
 import platform
+import os
+import tkinter
+from datetime import datetime
+
+import requests
+from PIL import ImageTk, Image
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 FONT = 'Futura'
@@ -20,7 +25,7 @@ if platform.system() == "Windows":
 
 def weather_api_connection(city):
     par = {'q': city,
-           'appid': 'bc12083e70d2d22298c2df1cec7101d9',
+           'appid': os.getenv('appid'),
            'units': 'metric'}
 
     return requests.get('http://api.openweathermap.org/data/2.5/weather', params=par)
